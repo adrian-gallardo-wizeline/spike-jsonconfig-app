@@ -58,6 +58,8 @@ module.exports = {
   plugins: [
     { src: '~/plugins/vue-codemirror', ssr: false },
     { src: '~/plugins/vue-notifications', ssr: false },
-    { src: '~/plugins/vue-elementui' }
+    { src: '~/plugins/vue-elementui' },
+    { src: '~/plugins/vue-async-computed' },
+    { src: '~/plugins/vue-async-directive' },
   ]
 }

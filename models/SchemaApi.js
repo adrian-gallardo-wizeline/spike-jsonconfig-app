@@ -1,7 +1,7 @@
 import axios from 'axios'
 import FragmentSchemaApi from '~/models/FragmentSchemaApi'
 import merge from 'lodash/merge'
-import Schema from './Schema'
+import Schema from './Schema';
 
 class SchemaApi {
 
@@ -10,35 +10,15 @@ class SchemaApi {
   }
 
   async getAll() {
-    return await axios.get(this.endpoint)
-      .then(response => {
-        const schemas = response.data
-        return schemas.map(schemaData => new Schema(schemaData))
-      })
+    return await axios.get(this.endpoint).then(response => response.data)
   }
 
   async get(id) {
     const url = `${this.endpoint}/${id}`
-    return await axios.get(url)
-      .then(response => {
-        const schemaData = response.data
-        return new Schema(schemaData)
-      })
+    return await axios.get(url).then(response => response.data)
   }
 
   async save(schema) {
-    const url = `${this.endpoint}/${schema.id}`
-
-    const { childSchemas, parentSchema, composedFragments, ...shallowData } = schema.getData()
-
-    return await axios.patch(url, shallowData)
-      .then(response => {
-        const schemaData = response.data
-        return new Schema(schemaData)
-      })
-  }
-
-  async getComposedFragments(schemaId) {
     const url = `${this.endpoint}/${schema.id}`
 
     const { childSchemas, parentSchema, composedFragments, ...shallowData } = schema
@@ -46,27 +26,28 @@ class SchemaApi {
     await axios.patch(url, shallowData).then(response => response.data)
   }
 
-  async resolveSchemaHierarchy(schema) {
-    if (!schema) {
-      return
-    }
-    if (typeof schema.parentSchema === 'number') {
-      schema.parentSchema = await this.get(schema.parentSchema)
-      schema.composedFragments = await FragmentSchemaApi.getBySchema(schema.id)
-    }
-    await this.resolveSchemaHierarchy(schema.parentSchema)
-    return schema
+  async fetchSchemaHierarchy(id) {
+    const url = `${this.endpoint}/fetch-hierarchy/${id}`
+    return await axios.get(url).then(response => response.data)
   }
 
-  flatenSchemaHierarchy(schema) {
-    const schemas = []
+  getMergedSchema(schema) {
+    let jsonSchema = {}
 
-    let currentSchema = schema
-    while (currentSchema) {
-      schemas.unshift(currentSchema)
-      currentSchema = currentSchema.parentSchema
+    while (schema) {
+      jsonSchema = merge({}, schema.jsonSchema, jsonSchema)
+      schema = schema.parentSchema
     }
-    return schemas
+    return jsonSchema
+  }
+
+  getInheritanceChain(schema) {
+    const inheritanceChain = []
+    while (schema.parentSchema) {
+      inheritanceChain.unshift(schema.parentSchema.name)
+      schema = schema.parentSchema
+    }
+    return inheritanceChain
   }
 }
 

@@ -1,19 +1,16 @@
 import get from 'lodash/get'
 import set from 'lodash/set'
+import merge from 'lodash/merge'
 import SchemaApi from './SchemaApi'
 
 class Schema {
+
+  static fromArray(schemas) {
+    return schemas.map(schema => new Schema(schema))
+  }
+
   constructor(data) {
     this.data = data
-
-    if (this.data.parentSchema && this.data.parentSchema !== 'number') {
-      this.data.parentSchema = new Schema(this.data.parentSchema)
-    }
-    if (this.data.childSchemas) {
-      this.data.childSchemas.map(childSchema => {
-        return typeof childSchema === 'number' ? childSchema : new Schema(childSchema)
-      })
-    }
   }
 
   getData() {
@@ -42,10 +39,6 @@ class Schema {
     }, this.data.jsonSchema)
   }
 
-  async getJsonSchemaWithMergedHierarchy() {
-    // await SchemaApi.populateSchemaHierarchyIfNeeded(this)
-  }
-
   getId() {
     return this.data.id
   }
@@ -58,16 +51,45 @@ class Schema {
     return this.data.version
   }
 
+  getJsonSchema() {
+    return this.data.jsonSchema
+  }
+
   async getParentSchema() {
+    if (!this.data.parentSchema) {
+      return null
+    }
     if (typeof this.data.parentSchema === 'number') {
       this.data.parentSchema = await SchemaApi.get(this.data.parentSchema)
     }
+    if (!(this.data.parentSchema instanceof Schema)) {
+      this.data.parentSchema = new Schema(this.data.parentSchema)
+    }
     return this.data.parentSchema
+  }
+
+  async fetchHierarchy() {
+    let parentSchema = await this.getParentSchema()
+    while (parentSchema) {
+      parentSchema = await parentSchema.getParentSchema()
+    }
+    return parentSchema
+  }
+
+  getMergedSchema() {
+    let jsonSchema = {}
+    let schema = this
+    while(schema) {
+      jsonSchema = merge({}, schema.getData().jsonSchema, jsonSchema)
+      schema = schema.parentSchema
+    }
+    return jsonSchema
   }
 
   toString() {
     return this.data.name
   }
+
 }
 
 export default Schema

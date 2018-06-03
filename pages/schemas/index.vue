@@ -13,11 +13,11 @@
           </sui-table-row>
         </sui-table-header>
         <sui-table-body>
-          <sui-table-row v-for="schema of schemas" :key="schema.getId()">
-            <sui-table-cell :width="1">{{ schema.getId() }}</sui-table-cell>
-            <sui-table-cell :width="5">{{ schema.getName() }}</sui-table-cell>
-            <sui-table-cell :width="2">{{ schema.getVersion() }}</sui-table-cell>
-            <sui-table-cell :width="5">{{ schema.getParentSchema() || '--' }}</sui-table-cell>
+          <sui-table-row v-for="schema of schemas" :key="schema.id">
+            <sui-table-cell :width="1">{{ schema.id }}</sui-table-cell>
+            <sui-table-cell :width="5">{{ schema.name }}</sui-table-cell>
+            <sui-table-cell :width="2">{{ schema.version }}</sui-table-cell>
+            <sui-table-cell :width="5">{{ schema.parentSchema ? schema.parentSchema.name : '--' }}</sui-table-cell>
             <sui-table-cell :width="3" textAlign="center">
               <nuxt-link :to="editRoute(schema)">
                 <sui-button color="blue" size="mini" :compact="true">
@@ -36,6 +36,7 @@
 <script>
 
 import SchemaApi from '~/models/SchemaApi'
+import Schema from '~/models/Schema'
 
 export default {
   async asyncData({env}) {
@@ -44,8 +45,8 @@ export default {
   },
   methods: {
     editRoute(schema) {
-      return {name: 'schemas-schema', params: {schema: schema.getId()} }
+      return {name: 'schemas-schema', params: {schema: schema.id} }
     }
-  }
+  },
 }
 </script>

@@ -19,13 +19,20 @@
 
       <div class="form-group">
         <label for="name">Name</label>
-        <input type="text" class="form-control" id="name" placeholder="Enter name" v-model="schema.name">
+        <input type="text" class="form-control" id="name" placeholder="Enter name" v-model="schemaData.name">
       </div>
 
       <div class="form-group">
         <label for="version">Version</label>
-        <input type="text" class="form-control" id="version" placeholder="Enter version" v-model="schema.version" readonly>
+        <input type="text" class="form-control" id="version" placeholder="Enter version" v-model="schemaData.version" readonly>
       </div>
+
+      <div class="form-group">
+        <label>Inherits From</label>
+        <input type="text" class="form-control" v-model="inheritanceChain" readonly>
+      </div>
+      
+      <json-schema :schema="schemaData"></json-schema>
 
       <no-ssr>
         <sui-segment class="jsoneditor-wrapper">
@@ -49,6 +56,10 @@
 // import VueAceEditor from 'vue2-ace-editor'
 // import VJsoneditor from 'vue-jsoneditor';
 import SchemaApi from '~/models/SchemaApi'
+import Schema from '~/models/Schema'
+
+import JsonSchema from '~/components/JsonSchema'
+
 import jsonSchemaV7 from '~/assets/json-schema-v7'
 
 // import { Validator } from 'jsonschema'
@@ -61,15 +72,15 @@ import Ajv from 'ajv'
 const ajv = new Ajv()
 var validate = ajv.compile(jsonSchemaV7);
 
-console.log(jsonSchemaV7)
-
 export default {
   async asyncData({params}) {
-    const schema = await SchemaApi.get(params.schema)
+    const schemaData = await SchemaApi.fetchSchemaHierarchy(params.schema)
+    const inheritanceChain = SchemaApi.getInheritanceChain(schemaData).join(' -> ')
     return {
-      schema,
-      schemaName: schema.name,
-      jsonSchema: JSON.stringify(schema.jsonSchema, null, 4),
+      schemaData,
+      inheritanceChain,
+      schemaName: schemaData.name,
+      jsonSchema: JSON.stringify(schemaData.jsonSchema, null, 4),
     }
   },
   data() {
@@ -107,6 +118,7 @@ export default {
         var valid = validate(schema)
 
         if (valid) {
+          this.schemaData.jsonSchema = schema
           return schema
         } else {
           this.setError(validate.errors)
@@ -123,10 +135,10 @@ export default {
       if (!jsonSchema) {
         return
       }
-      this.schema.jsonSchema = jsonSchema
+      this.schemaData.jsonSchema = jsonSchema
       try {
-        await SchemaApi.save(this.schema)
-        this.schemaName = this.schema.name,
+        await SchemaApi.save(this.schemaData)
+        this.schemaName = this.schemaData.name,
 
         this.$notify({
           title: 'Schema saved successfully!',
@@ -141,9 +153,9 @@ export default {
       }
     }
   },
-  mounted() {
-    
-  }
+  components: {
+    JsonSchema
+  },
   // head: {
   //   link: [
   //     { rel: 'stylesheet', href: 'https://cdnjs.cloudflare.com/ajax/libs/jsoneditor/5.14.0/jsoneditor.min.css' },

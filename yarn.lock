@@ -7561,6 +7561,10 @@ vm-browserify@0.0.4:
   dependencies:
     indexof "0.0.1"
 
+vue-async-computed@^3.3.1:
+  version "3.3.1"
+  resolved "https://registry.npmjs.org/vue-async-computed/-/vue-async-computed-3.3.1.tgz#9d754e649ccabef97e7e3932f1bc097a66a23db7"
+
 vue-codemirror-lite@^1.0.4:
   version "1.0.4"
   resolved "https://registry.npmjs.org/vue-codemirror-lite/-/vue-codemirror-lite-1.0.4.tgz#48a5cd7d17c0914503c8cd9d9b56b438e49c3410"
