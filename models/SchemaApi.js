@@ -10,20 +10,32 @@ class SchemaApi {
   }
 
   async getAll() {
-    return await axios.get(this.endpoint).then(response => response.data)
+    return await axios.get(this.endpoint)
+      .then(response => {
+        const schemas = response.data
+        return schemas.map(schemaData => new Schema(schemaData))
+      })
   }
 
   async get(id) {
     const url = `${this.endpoint}/${id}`
-    return await axios.get(url).then(response => response.data)
+    return await axios.get(url)
+      .then(response => {
+        const schemaData = response.data
+        return new Schema(schemaData)
+      })
   }
 
   async save(schema) {
     const url = `${this.endpoint}/${schema.id}`
 
-    const { childSchemas, parentSchema, composedFragments, ...shallowData } = schema
+    const { childSchemas, parentSchema, composedFragments, ...shallowData } = schema.getData()
 
-    await axios.patch(url, shallowData).then(response => response.data)
+    return await axios.patch(url, shallowData)
+      .then(response => {
+        const schemaData = response.data
+        return new Schema(schemaData)
+      })
   }
 
   async getComposedFragments(schemaId) {
@@ -55,23 +67,6 @@ class SchemaApi {
       currentSchema = currentSchema.parentSchema
     }
     return schemas
-  }
-
-  mergeFragmentSchemas(schema) {
-    console.log('schemaApi', schema)
-    if (!schema.composedFragments) {
-      return schema.jsonSchema
-    }
-    const mergedSchema = schema.composedFragments.reduce((mergedSchema, fragment) => {
-      let schema = {
-        properties: {
-          [fragment.baseProp]: fragment.jsonSchema,
-        }
-      }
-      return merge({}, mergedSchema, schema)
-    }, schema.jsonSchema)
-
-    return mergedSchema
   }
 }
 
