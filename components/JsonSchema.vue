@@ -1,9 +1,7 @@
 <template>
-  <pre>
-    <code style="white-space: pre;">
-      {{ mergedSchema }}
-    </code>
-  </pre>
+  <sui-segment>
+    <code class="code">{{ mergedSchema }}</code>
+  </sui-segment>
 </template>
 
 <script>
@@ -23,3 +21,13 @@ export default {
   },
 }
 </script>
+
+<style lang="scss" scoped>
+.code {
+  white-space: pre;
+  display: block;
+  height: 100%;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+</style>

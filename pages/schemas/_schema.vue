@@ -31,20 +31,29 @@
         <label>Inherits From</label>
         <input type="text" class="form-control" v-model="inheritanceChain" readonly>
       </div>
-      
-      <json-schema :schema="schemaData"></json-schema>
 
-      <no-ssr>
-        <sui-segment class="jsoneditor-wrapper">
-          <codemirror 
-            v-model="jsonSchema"
-            :options="editorOption"
-            @change="onCodeChanged"
-            ref="myEditor"
-          >
-          </codemirror>   
-        </sui-segment>
-      </no-ssr>
+      <sui-grid divided="vertically">
+        <sui-grid-row :columns="2">
+          <sui-grid-column>
+            <h3 is="sui-header">Schema Editor</h3>
+            <no-ssr>
+              <sui-segment class="jsoneditor-wrapper">
+                <codemirror 
+                  v-model="jsonSchema"
+                  :options="editorOption"
+                  @change="onCodeChanged"
+                  ref="myEditor"
+                />
+              </sui-segment>
+            </no-ssr>
+          </sui-grid-column>
+          <sui-grid-column>
+            <h3 is="sui-header">Merged schema</h3>
+            <json-schema :schema="schemaData" class="jsoneditor-wrapper" />
+          </sui-grid-column>
+        </sui-grid-row>
+      </sui-grid> 
+      
       
     </div>
   </section>
@@ -167,8 +176,13 @@ export default {
 }
 </script>
 
-<style>
-.jsoneditor-wrapper .CodeMirror {
+<style scoped lang="scss">
+.jsoneditor-wrapper {
   height: 700px;
 }
+.jsoneditor-wrapper /deep/ .vue-codemirror-wrap,
+.jsoneditor-wrapper /deep/ .CodeMirror {
+  height: 100%;
+}
+
 </style>

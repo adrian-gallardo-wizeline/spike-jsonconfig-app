@@ -35,7 +35,18 @@ class SchemaApi {
     let jsonSchema = {}
 
     while (schema) {
-      jsonSchema = merge({}, schema.jsonSchema, jsonSchema)
+      let currentSchema = schema.jsonSchema
+
+      if (schema.composedFragments) {
+        schema.composedFragments.forEach(fragment => {
+          const fragmentSchema = fragment.baseProp ?
+            {properties: {[fragment.baseProp]: fragment.jsonSchema}} :
+            fragment.jsonSchema
+          currentSchema = merge({}, currentSchema, fragmentSchema)
+        })
+      }
+
+      jsonSchema = merge({}, currentSchema, jsonSchema)
       schema = schema.parentSchema
     }
     return jsonSchema
