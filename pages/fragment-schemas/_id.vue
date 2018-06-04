@@ -64,8 +64,8 @@ var validate = ajv.compile(jsonSchemaV7);
 
 export default {
   async asyncData({params}) {
-    const fragmentId = parseInt(params.fragmentSchema)
-    const fragmentData = fragmentId ? await FragmentSchemaApi.get(params.fragmentSchema) : schemaTemplate
+    const fragmentId = parseInt(params.id)
+    const fragmentData = fragmentId ? await FragmentSchemaApi.get(fragmentId) : schemaTemplate
 
     return {
       fragmentData,

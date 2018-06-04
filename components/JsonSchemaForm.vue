@@ -1,6 +1,9 @@
 <template>
   <div>
-    <form ref="form" class="json-schema-form"></form>
+    <h3 is="sui-header">JSON Data</h3>
+    <sui-segment class="jsoneditor-wrapper">
+      <form ref="form" class="json-schema-form"></form>
+    </sui-segment>
   </div>
   
 </template>
@@ -28,7 +31,7 @@ export default {
       theme: 'bootstrap4',
       schema: this.schema,
 
-      // startval: this.data,
+      startval: this.data,
       disable_collapse: true,
       disable_edit_json: true,
       disable_properties: true,
@@ -49,16 +52,11 @@ export default {
 
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .json-schema-form {
-  .card {
+  & /deep/ .card {
     padding: 35px;
     margin-bottom: 35px;
   }
-  // .btn-group,
-  // .json-editor-btn-add,
-  // .json-editor-btn-delete {
-  //   display: none;
-  // }
 }
 </style>

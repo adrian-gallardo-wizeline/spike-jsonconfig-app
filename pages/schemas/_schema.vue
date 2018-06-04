@@ -165,7 +165,6 @@ export default {
       this.schemaData = Object.assign({}, this.schemaData, { parentSchema })
     },
     updateFragmentSchemas(composedFragments) {
-      console.log(composedFragments)
       this.schemaData = Object.assign({}, this.schemaData, { composedFragments })
     },
     onCodeChanged(jsonSchema) {

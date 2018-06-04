@@ -16,11 +16,13 @@ class DataFragmentApi {
   }
 
   async save(data) {
-    const url = `${this.endpoint}/${data.id}`
+    const url = data.id ? `${this.endpoint}/${data.id}` : this.endpoint
+    const requestMethod = data.id ? axios.patch : axios.post
 
     const { fragmentSchema, datas, ...shallowData } = data
+    shallowData.fragmentSchema = fragmentSchema ? fragmentSchema.id : null
 
-    await axios.patch(url, shallowData).then(response => response.data)
+    await requestMethod(url, shallowData).then(response => response.data)
   }
 }
 
