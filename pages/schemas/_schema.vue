@@ -5,7 +5,7 @@
 
     <div>
       <h2 is="sui-header" class="heading" textAlign="left" :dividing="true">
-        Edit Schema - {{ schemaName }}
+        {{ editMode ? `Edit Schema - ${schemaName }` : 'New Schema' }}
 
         <sui-button color="orange" size="tiny" :compact="true" floated="right" @click="saveSchema" :disabled="!!error">
           <i class="save icon"></i>
@@ -19,42 +19,52 @@
 
       <div class="form-group">
         <label for="name">Name</label>
-        <input type="text" class="form-control" id="name" placeholder="Enter name" v-model="schemaData.name">
+        <input type="text" class="form-control" id="name" placeholder="Enter schema name" v-model="schemaData.name">
       </div>
 
-      <div class="form-group">
+      <div class="form-group" v-if="editMode">
         <label for="version">Version</label>
-        <input type="text" class="form-control" id="version" placeholder="Enter version" v-model="schemaData.version" readonly>
+        <input type="text" class="form-control" id="version" v-model="schemaData.version" readonly>
       </div>
 
-      <div class="form-group">
+      <div class="form-group" v-if="editMode && hasParentSchema">
         <label>Inherits From</label>
         <input type="text" class="form-control" v-model="inheritanceChain" readonly>
       </div>
 
-      <sui-grid divided="vertically">
-        <sui-grid-row :columns="2">
-          <sui-grid-column>
-            <h3 is="sui-header">Schema Editor</h3>
-            <no-ssr>
-              <sui-segment class="jsoneditor-wrapper">
-                <codemirror 
-                  v-model="jsonSchema"
-                  :options="editorOption"
-                  @change="onCodeChanged"
-                  ref="myEditor"
-                />
-              </sui-segment>
-            </no-ssr>
-          </sui-grid-column>
-          <sui-grid-column>
-            <h3 is="sui-header">Merged schema</h3>
-            <json-schema :schema="schemaData" class="jsoneditor-wrapper" />
-          </sui-grid-column>
-        </sui-grid-row>
-      </sui-grid> 
-      
-      
+      <div class="form-group" v-if="schemas.length > 0">
+        <label>Parent Schema</label>
+        <schema-selector 
+          :schemas="schemas" 
+          :excluded-schema="schemaData"
+          :selected-schema-id="hasParentSchema ? schemaData.parentSchema.id : null" 
+          @select="updateParentSchema" 
+        />
+      </div>
+
+      <div class="schema-wrapper">
+        <sui-grid divided="vertically">
+          <sui-grid-row :columns="hasParentSchema ? 2 : 1">
+            <sui-grid-column>
+              <h3 is="sui-header">Schema Editor</h3>
+              <no-ssr>
+                <sui-segment class="jsoneditor-wrapper">
+                  <codemirror 
+                    v-model="jsonSchema"
+                    :options="editorOption"
+                    @change="onCodeChanged"
+                    ref="myEditor"
+                  />
+                </sui-segment>
+              </no-ssr>
+            </sui-grid-column>
+            <sui-grid-column v-if="hasParentSchema">
+              <h3 is="sui-header">Merged schema</h3>
+              <json-schema :schema="schemaData" class="jsoneditor-wrapper" />
+            </sui-grid-column>
+          </sui-grid-row>
+        </sui-grid>
+      </div>      
     </div>
   </section>
 </template>
@@ -66,10 +76,12 @@
 // import VJsoneditor from 'vue-jsoneditor';
 import SchemaApi from '~/models/SchemaApi'
 import Schema from '~/models/Schema'
-
+import schemaTemplate from '~/models/utils/schemaTemplate.json'
+console.log('schemaTemplate', schemaTemplate)
 import JsonSchema from '~/components/JsonSchema'
+import SchemaSelector from '~/components/SchemaSelector'
 
-import jsonSchemaV7 from '~/assets/json-schema-v7'
+import jsonSchemaV7 from '~/assets/json-schema-v7.json'
 
 // import { Validator } from 'jsonschema'
 // const v = new Validator();
@@ -83,9 +95,12 @@ var validate = ajv.compile(jsonSchemaV7);
 
 export default {
   async asyncData({params}) {
-    const schemaData = await SchemaApi.fetchSchemaHierarchy(params.schema)
+    const schemaId = parseInt(params.schema)
+    const schemaData = schemaId ? await SchemaApi.fetchSchemaHierarchy(schemaId) : schemaTemplate
+    const schemas = await SchemaApi.getAll()
     const inheritanceChain = SchemaApi.getInheritanceChain(schemaData).join(' -> ')
     return {
+      schemas,
       schemaData,
       inheritanceChain,
       schemaName: schemaData.name,
@@ -109,6 +124,12 @@ export default {
     }
   },
   computed: {
+    editMode() {
+      return !!this.schemaData.id
+    },
+    hasParentSchema() {
+      return !!this.schemaData.parentSchema
+    }
     // editor() {
     //   // get current editor object
     //   const editor = this.$refs.myEditor.editor
@@ -116,6 +137,9 @@ export default {
     // }
   },
   methods: {
+    updateParentSchema(parentSchema) {
+      this.schemaData = Object.assign({}, this.schemaData, { parentSchema })
+    },
     onCodeChanged(jsonSchema) {
       this.validateJSONSchema(jsonSchema)
     },
@@ -153,6 +177,9 @@ export default {
           title: 'Schema saved successfully!',
           type: 'success',
         })
+        
+        this.$router.push({name: 'schemas'})
+
       } catch (error) {
         this.$notify({
           title: `Schema couldn't be saved`,
@@ -163,7 +190,8 @@ export default {
     }
   },
   components: {
-    JsonSchema
+    JsonSchema,
+    SchemaSelector,
   },
   // head: {
   //   link: [
@@ -177,6 +205,10 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.schema-wrapper {
+  padding-left: 16px;
+  padding-top: 10px;
+}
 .jsoneditor-wrapper {
   height: 700px;
 }

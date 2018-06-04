@@ -1,7 +1,16 @@
 <template>
   <section class="container">
     <div>
-      <h2 is="sui-header" class="heading" textAlign="left" :dividing="true">Schemas</h2>
+      <h2 is="sui-header" class="heading" textAlign="left" :dividing="true">
+        Schemas
+
+        <nuxt-link :to="{ name: 'schemas-schema', params: {'schema': 'new'} }">
+          <sui-button color="orange" size="mini" :compact="true" floated="right">
+            <i class="plus icon"></i>
+            New
+          </sui-button>
+        </nuxt-link>
+      </h2>
       <sui-table striped>
         <sui-table-header>
           <sui-table-row>

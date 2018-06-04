@@ -19,11 +19,16 @@ class SchemaApi {
   }
 
   async save(schema) {
-    const url = `${this.endpoint}/${schema.id}`
+    const url = schema.id ? `${this.endpoint}/${schema.id}` : this.endpoint
+    const requestMethod = schema.id ? axios.patch : axios.post
 
     const { childSchemas, parentSchema, composedFragments, ...shallowData } = schema
+    shallowData.parentSchema = parentSchema ? parentSchema.id : null
+    shallowData.composedFragments = composedFragments ? 
+      composedFragments.map(fragment => fragment.id) :
+      []
 
-    await axios.patch(url, shallowData).then(response => response.data)
+    await requestMethod(url, shallowData).then(response => response.data)
   }
 
   async fetchSchemaHierarchy(id) {

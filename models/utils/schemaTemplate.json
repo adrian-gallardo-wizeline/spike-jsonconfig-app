@@ -1,0 +1,13 @@
+{
+  "jsonSchema": {
+    "title": "SampleSchema",
+    "type": "object",
+    "properties": {
+      "sampleProp": {
+        "type": "string",
+        "default": "",
+        "description": ""
+      }
+    }
+  }
+}
