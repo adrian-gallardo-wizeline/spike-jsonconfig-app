@@ -5,9 +5,9 @@
 
     <div>
       <h2 is="sui-header" class="heading" textAlign="left" :dividing="true">
-        Edit Fragment Schema - {{ pageTitle }}
+        {{ pageTitle }}
 
-        <sui-button color="orange" size="tiny" :compact="true" floated="right" @click="saveSchema" :disabled="!!error">
+        <sui-button color="orange" size="tiny" :compact="true" floated="right" @click="save" :disabled="!!error">
           <i class="save icon"></i>
           Save
         </sui-button>
@@ -19,29 +19,33 @@
 
       <div class="form-group">
         <label for="name">Name</label>
-        <input type="text" class="form-control" id="name" placeholder="Enter name" v-model="schema.name">
+        <input type="text" class="form-control" id="name" placeholder="Enter name" v-model="fragmentData.name">
       </div>
 
-      <div class="form-group">
+      <div class="form-group" v-if="editMode">
         <label for="version">Version</label>
-        <input type="text" class="form-control" id="version" placeholder="Enter version" v-model="schema.version" readonly>
+        <input type="text" class="form-control" id="version" placeholder="Enter version" v-model="fragmentData.version" readonly>
       </div>
 
       <div class="form-group">
         <label for="name">Key Prop</label>
-        <input type="text" class="form-control" id="name" placeholder="Enter key prop for this JSON fragment" v-model="schema.baseProp">
+        <input type="text" class="form-control" id="name" placeholder="Enter key prop for this JSON schema" v-model="fragmentData.baseProp">
       </div>
 
       <no-ssr>
-        <sui-segment class="jsoneditor-wrapper">
-          <codemirror 
-            v-model="jsonSchema"
-            :options="editorConfig"
-            @change="onCodeChanged"
-            ref="myEditor"
-          >
-          </codemirror>   
-        </sui-segment>
+        <div>
+          <h3 is="sui-header">Schema Editor</h3>
+          <sui-segment class="jsoneditor-wrapper">
+            <codemirror 
+              v-model="jsonSchema"
+              :options="editorConfig"
+              @change="onCodeChanged"
+              ref="myEditor"
+            >
+            </codemirror>   
+          </sui-segment>
+        </div>
+        
       </no-ssr>
       
     </div>
@@ -50,7 +54,8 @@
 
 <script>
 
-import Api from '~/models/FragmentSchemaApi'
+import FragmentSchemaApi from '~/models/FragmentSchemaApi'
+import schemaTemplate from '~/models/utils/schemaTemplate.json'
 import jsonSchemaV7 from '~/assets/json-schema-v7'
 
 import Ajv from 'ajv'
@@ -59,17 +64,27 @@ var validate = ajv.compile(jsonSchemaV7);
 
 export default {
   async asyncData({params}) {
-    const schema = await Api.get(params.fragmentSchema)
+    const fragmentId = parseInt(params.fragmentSchema)
+    const fragmentData = fragmentId ? await FragmentSchemaApi.get(params.fragmentSchema) : schemaTemplate
+
     return {
-      schema,
-      pageTitle: schema.name,
-      jsonSchema: JSON.stringify(schema.jsonSchema, null, 4),
+      fragmentData,
+      fragmentName: fragmentData.name,
+      jsonSchema: JSON.stringify(fragmentData.jsonSchema, null, 4),
     }
   },
   data() {
     return {
       error: null,
       editorConfig: process.env.CODEMIRROR_CONFIG,
+    }
+  },
+  computed: {
+    editMode() {
+      return !!this.fragmentData.id
+    },
+    pageTitle() {
+      return this.editMode ? `Edit Fragment Schema - ${this.fragmentName }` : 'New Fragment Schema'
     }
   },
   methods: {
@@ -80,11 +95,11 @@ export default {
       this.setError(null)
 
       try {
-        const schema = JSON.parse(jsonSchema || this.jsonSchema)
-        var valid = validate(schema)
+        const fragmentData = JSON.parse(jsonSchema || this.jsonSchema)
+        var valid = validate(fragmentData)
 
         if (valid) {
-          return schema
+          return fragmentData
         } else {
           this.setError(validate.errors)
         }        
@@ -95,20 +110,23 @@ export default {
     setError(error) {
       this.error = error
     },
-    async saveSchema() {
+    async save() {
       const jsonSchema = this.validateJSONSchema()
       if (!jsonSchema) {
         return
       }
-      this.schema.jsonSchema = jsonSchema
+      this.fragmentData.jsonSchema = jsonSchema
       try {
-        await Api.save(this.schema)
-        this.pageTitle = this.schema.name,
+        await FragmentSchemaApi.save(this.fragmentData)
+        this.fragmentName = this.fragmentData.name,
 
         this.$notify({
           title: 'Fragmnt Schema saved successfully!',
           type: 'success',
         })
+
+        this.$router.push({name: 'fragment-schemas'})
+
       } catch (error) {
         this.$notify({
           title: `Fragment Schema couldn't be saved`,

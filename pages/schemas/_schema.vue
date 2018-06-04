@@ -5,9 +5,9 @@
 
     <div>
       <h2 is="sui-header" class="heading" textAlign="left" :dividing="true">
-        {{ editMode ? `Edit Schema - ${schemaName }` : 'New Schema' }}
+        {{ pageTitle }}
 
-        <sui-button color="orange" size="tiny" :compact="true" floated="right" @click="saveSchema" :disabled="!!error">
+        <sui-button color="orange" size="tiny" :compact="true" floated="right" @click="save" :disabled="!!error">
           <i class="save icon"></i>
           Save
         </sui-button>
@@ -27,18 +27,28 @@
         <input type="text" class="form-control" id="version" v-model="schemaData.version" readonly>
       </div>
 
-      <div class="form-group" v-if="editMode && hasParentSchema">
+      <!-- <div class="form-group" v-if="editMode && hasParentSchema">
         <label>Inherits From</label>
         <input type="text" class="form-control" v-model="inheritanceChain" readonly>
-      </div>
+      </div> -->
 
       <div class="form-group" v-if="schemas.length > 0">
         <label>Parent Schema</label>
         <schema-selector 
           :schemas="schemas" 
           :excluded-schema="schemaData"
-          :selected-schema-id="hasParentSchema ? schemaData.parentSchema.id : null" 
+          :value="hasParentSchema ? schemaData.parentSchema.id : null" 
           @select="updateParentSchema" 
+        />
+      </div>
+
+      <div class="form-group" v-if="fragments.length > 0">
+        <label>Fragment Schemas</label>
+        <schema-selector 
+          :schemas="fragments" 
+          :value="fragmentSchemasIds" 
+          @select="updateFragmentSchemas" 
+          multiple
         />
       </div>
 
@@ -75,9 +85,10 @@
 // import VueAceEditor from 'vue2-ace-editor'
 // import VJsoneditor from 'vue-jsoneditor';
 import SchemaApi from '~/models/SchemaApi'
+import FragmentSchemaApi from '~/models/FragmentSchemaApi'
 import Schema from '~/models/Schema'
 import schemaTemplate from '~/models/utils/schemaTemplate.json'
-console.log('schemaTemplate', schemaTemplate)
+
 import JsonSchema from '~/components/JsonSchema'
 import SchemaSelector from '~/components/SchemaSelector'
 
@@ -97,10 +108,13 @@ export default {
   async asyncData({params}) {
     const schemaId = parseInt(params.schema)
     const schemaData = schemaId ? await SchemaApi.fetchSchemaHierarchy(schemaId) : schemaTemplate
+    const fragments = await FragmentSchemaApi.getAll()
+
     const schemas = await SchemaApi.getAll()
     const inheritanceChain = SchemaApi.getInheritanceChain(schemaData).join(' -> ')
     return {
       schemas,
+      fragments,
       schemaData,
       inheritanceChain,
       schemaName: schemaData.name,
@@ -129,6 +143,16 @@ export default {
     },
     hasParentSchema() {
       return !!this.schemaData.parentSchema
+    },
+    hasFragmentSchemas() {
+      return !!this.schemaData.composedFragments
+    },
+    fragmentSchemasIds() {
+      return this.hasFragmentSchemas ? 
+        this.schemaData.composedFragments.map(fragment => fragment.id) : null
+    },
+    pageTitle() {
+      return this.editMode ? `Edit Schema - ${this.schemaName }` : 'New Schema'
     }
     // editor() {
     //   // get current editor object
@@ -139,6 +163,10 @@ export default {
   methods: {
     updateParentSchema(parentSchema) {
       this.schemaData = Object.assign({}, this.schemaData, { parentSchema })
+    },
+    updateFragmentSchemas(composedFragments) {
+      console.log(composedFragments)
+      this.schemaData = Object.assign({}, this.schemaData, { composedFragments })
     },
     onCodeChanged(jsonSchema) {
       this.validateJSONSchema(jsonSchema)
@@ -163,7 +191,7 @@ export default {
     setError(error) {
       this.error = error
     },
-    async saveSchema() {
+    async save() {
       const jsonSchema = this.validateJSONSchema()
       if (!jsonSchema) {
         return

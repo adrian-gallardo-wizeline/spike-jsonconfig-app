@@ -16,11 +16,12 @@ class FragmentSchemaApi {
   }
 
   async save(fragmentschema) {
-    const url = `${this.endpoint}/${fragmentschema.id}`
+    const url = fragmentschema.id ? `${this.endpoint}/${fragmentschema.id}` : this.endpoint
+    const requestMethod = fragmentschema.id ? axios.patch : axios.post
 
     const {composedSchemas, dataFragments, ...shallowData} = fragmentschema
 
-    await axios.patch(url, shallowData).then(response => response.data)
+    await requestMethod(url, shallowData).then(response => response.data)
   }
 
   async getBySchema(schemaId) {

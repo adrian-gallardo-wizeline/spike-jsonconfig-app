@@ -1,7 +1,16 @@
 <template>
   <section class="container">
     <div>
-      <h2 is="sui-header" class="heading" textAlign="left" :dividing="true">Fragment Schemas</h2>
+      <h2 is="sui-header" class="heading" textAlign="left" :dividing="true">
+        Fragment Schemas
+
+        <nuxt-link :to="{ name: 'fragment-schemas-id', params: {'id': 'new'} }">
+          <sui-button color="orange" size="mini" :compact="true" floated="right">
+            <i class="plus icon"></i>
+            New
+          </sui-button>
+        </nuxt-link>
+      </h2>
       <sui-table striped>
         <sui-table-header>
           <sui-table-row>
@@ -27,7 +36,7 @@
               </ul>
             </sui-table-cell>
             <sui-table-cell :width="3" textAlign="center">
-              <nuxt-link :to="{name: 'fragment-schemas-fragmentSchema', params: {fragmentSchema: fragmentSchema.id} }">
+              <nuxt-link :to="{name: 'fragment-schemas-id', params: {id: fragmentSchema.id} }">
                 <sui-button color="blue" size="mini" :compact="true">
                   <i class="pencil alternate icon"></i>
                   Edit
