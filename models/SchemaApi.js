@@ -31,8 +31,8 @@ class SchemaApi {
     await requestMethod(url, shallowData).then(response => response.data)
   }
 
-  async fetchSchemaHierarchy(id) {
-    const url = `${this.endpoint}/fetch-hierarchy/${id}`
+  async fetchSchemaHierarchy(schemaId) {
+    const url = `${this.endpoint}/fetch-hierarchy/${schemaId}`
     return await axios.get(url).then(response => response.data)
   }
 
@@ -64,6 +64,19 @@ class SchemaApi {
       schema = schema.parentSchema
     }
     return inheritanceChain
+  }
+
+  extractProps(schema) {
+    const props = {}
+    Object.keys(schema.properties).forEach(key => {
+      const prop = schema.properties[key]
+      if (prop.type === 'object') {
+        props[key] = this.extractProps(prop)
+      } else {
+        props[key] = prop.default || ""
+      }
+    })
+    return props
   }
 }
 

@@ -18,25 +18,15 @@ class DataFragmentApi {
   }
 
   async save(data) {
-    const url = `${this.endpoint}/${data.id}`
+    const url = data.id ? `${this.endpoint}/${data.id}` : this.endpoint
+    const requestMethod = data.id ? axios.patch : axios.post
 
     const { dataFragments, schema, ...shallowData } = data
+    shallowData.schema = schema ? schema.id : null
 
-    await axios.patch(url, shallowData).then(response => response.data)
+    await requestMethod(url, shallowData).then(response => response.data)
   }
 
-  async getMergedSchema(data) {
-    const schemaHierarchy = await SchemaApi.resolveSchemaHierarchy(data.schema)
-    const flatenSchemaHierarchy = SchemaApi.flatenSchemaHierarchy(schemaHierarchy)
-
-    return this.mergeJsonSchema(flatenSchemaHierarchy)
-  }
-
-  mergeJsonSchema(schemas) {
-    return schemas.reduce((mergedSchema, currentSchema) => {
-      return merge({}, mergedSchema, SchemaApi.mergeFragmentSchemas(currentSchema))
-    }, {})
-  }
 }
 
 export default new DataFragmentApi()

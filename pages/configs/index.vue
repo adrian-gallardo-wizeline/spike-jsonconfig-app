@@ -1,7 +1,16 @@
 <template>
   <section class="container">
     <div>
-      <h2 is="sui-header" class="heading" textAlign="left" :dividing="true">Configs</h2>
+      <h2 is="sui-header" class="heading" textAlign="left" :dividing="true">
+        Configs
+
+        <nuxt-link :to="{ name: 'configs-id', params: {'id': 'new'} }">
+          <sui-button color="orange" size="mini" :compact="true" floated="right">
+            <i class="plus icon"></i>
+            New
+          </sui-button>
+        </nuxt-link>
+      </h2>
       <sui-table striped>
         <sui-table-header>
           <sui-table-row>
@@ -14,17 +23,17 @@
           </sui-table-row>
         </sui-table-header>
         <sui-table-body>
-          <sui-table-row v-for="entity of data" :key="entity.id">
-            <sui-table-cell :width="1">{{ entity.id }}</sui-table-cell>
-            <sui-table-cell :width="4">{{ entity.name }}</sui-table-cell>
-            <sui-table-cell :width="2">{{ entity.version }}</sui-table-cell>
+          <sui-table-row v-for="config of configs" :key="config.id">
+            <sui-table-cell :width="1">{{ config.id }}</sui-table-cell>
+            <sui-table-cell :width="4">{{ config.name }}</sui-table-cell>
+            <sui-table-cell :width="2">{{ config.version }}</sui-table-cell>
             <sui-table-cell :width="3">
-              <nuxt-link :to="{name: 'schema-schema', params: {schema: entity.schema.id} }">
-                {{ entity.schema.name }}
+              <nuxt-link :to="{name: 'schema-schema', params: {schema: config.schema.id} }">
+                {{ config.schema.name }}
               </nuxt-link>
             </sui-table-cell>
             <sui-table-cell :width="3">
-              <ul class="pl-0 list-inline" v-for="dataFragment of entity.dataFragments" :key="dataFragment.id">
+              <ul class="pl-0 list-inline" v-for="dataFragment of config.dataFragments" :key="dataFragment.id">
                 <li class="list-inline-item">
                   <nuxt-link :to="editDataFragmentRoute(dataFragment)">
                     {{ dataFragment.name }}
@@ -33,7 +42,7 @@
               </ul>
             </sui-table-cell>
             <sui-table-cell :width="3" textAlign="center">
-              <nuxt-link :to="editRoute(entity)">
+              <nuxt-link :to="editRoute(config)">
                 <sui-button color="blue" size="mini" :compact="true">
                   <i class="pencil alternate icon"></i>
                   Edit
@@ -53,12 +62,12 @@ import Api from '~/models/DataApi'
 
 export default {
   async asyncData({env}) {
-    const data = await Api.getAll()
-    return {data}
+    const configs = await Api.getAll()
+    return {configs}
   },
   methods: {
-    editRoute(entity) {
-      return {name: 'configs-id', params: {id: entity.id} }
+    editRoute(config) {
+      return {name: 'configs-id', params: {id: config.id} }
     },
     editDataFragmentRoute(dataFragment) {
       return {name: 'data-fragments-dataFragment', params: {dataFragment: dataFragment.id} }

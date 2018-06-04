@@ -91,18 +91,11 @@ export default {
     },
     jsonData() {
       const data = this.dataFragment.jsonData
-      const extractedProps = this.extractProps(this.jsonSchema)
+      const extractedProps = SchemaApi.extractProps(this.jsonSchema)
       return merge({}, extractedProps, data)
     }
   },
   methods: {
-    extractProps(schema){
-      const props = {}
-      Object.keys(schema.properties).forEach(key => {
-        props[key] = schema.properties[key].default || ""
-      })
-      return props
-    },
     updateFragmentSchema(fragmentSchema) {
       this.dataFragment = Object.assign({}, this.dataFragment, { fragmentSchema: undefined, jsonData: {} })
 
