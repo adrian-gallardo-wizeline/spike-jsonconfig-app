@@ -54,7 +54,7 @@
 
       <div class="schema-wrapper">
         <sui-grid divided="vertically">
-          <sui-grid-row :columns="hasParentSchema ? 2 : 1">
+          <sui-grid-row :columns="hasComposedSchema ? 2 : 1">
             <sui-grid-column>
               <h3 is="sui-header">Schema Editor</h3>
               <no-ssr>
@@ -68,7 +68,7 @@
                 </sui-segment>
               </no-ssr>
             </sui-grid-column>
-            <sui-grid-column v-if="hasParentSchema">
+            <sui-grid-column v-if="hasComposedSchema">
               <h3 is="sui-header">Merged schema</h3>
               <json-schema :schema="schemaData" class="jsoneditor-wrapper" />
             </sui-grid-column>
@@ -145,7 +145,10 @@ export default {
       return !!this.schemaData.parentSchema
     },
     hasFragmentSchemas() {
-      return !!this.schemaData.composedFragments
+      return this.schemaData.composedFragments && this.schemaData.composedFragments.length > 0
+    },
+    hasComposedSchema() {
+      return this.hasParentSchema || this.hasFragmentSchemas
     },
     fragmentSchemasIds() {
       return this.hasFragmentSchemas ? 
