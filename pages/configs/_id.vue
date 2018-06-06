@@ -36,7 +36,7 @@
         />
       </div>
 
-      <no-ssr v-if="jsonSchema">
+      <no-ssr v-if="hasValidSchema">
         <JsonSchemaForm 
           :schema="jsonSchema" 
           :data="jsonData"
@@ -97,6 +97,9 @@ export default {
       const data = this.config.jsonData
       const extractedProps = SchemaApi.extractProps(this.jsonSchema)
       return merge({}, extractedProps, data)
+    },
+    hasValidSchema() {
+      return Object.keys(this.jsonSchema || {}).length > 0
     }
   },
   methods: {

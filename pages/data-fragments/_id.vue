@@ -51,6 +51,7 @@
 <script>
 
 import DataFragmentApi from '~/models/DataFragmentApi'
+import SchemaApi from '~/models/SchemaApi'
 import FragmentSchemaApi from '~/models/FragmentSchemaApi'
 
 import JsonSchemaForm from '~/components/JsonSchemaForm'

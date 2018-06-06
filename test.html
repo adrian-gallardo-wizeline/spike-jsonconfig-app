@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.js"></script>
+  
+  <ul id="dates"></ul>
+
+  <script>
+    const datesList = $('#dates')
+    const dates = []
+    const initDate = moment('2018-09-28')
+    const endDate = moment('2018-10-08')
+    const minDays = 20
+    const maxDays = 28
+    const maxIter = endDate.diff(initDate, 'days')
+    const links = []
+    const timeout = 20000
+
+    function getUrl(dateFrom, dateTo) {
+      return `https://www.espanol.skyscanner.com/transport/flights/gdl/cor/${dateFrom.format('YYMMDD')}/${dateTo.format('YYMMDD')}/?adultsv2=1&childrenv2=&cabinclass=economy&rtn=1&preferdirects=false&outboundaltsenabled=false&inboundaltsenabled=false#results`
+    }
+
+    function appendLink(dateFrom, dateTo, nights) {
+      const href = getUrl(dateFrom, dateTo)
+      const a = $('<a>').attr({ href, target: '_blank' }).text(`${dateFrom.format('DD/MM/YY')} - ${dateTo.format('DD/MM/YY')} - ${nights}noches`)
+
+      datesList.append($('<li>').append(a))
+      return a
+    }
+
+    for (var k = 0; k < maxIter; k++) {
+      for (var i = minDays; i <= maxDays; i++) {
+      
+        const dateFrom = initDate.clone().add(k, 'days')
+        const dateTo = dateFrom.clone().add(i, 'days')
+        
+        const nights = dateTo.diff(dateFrom, 'days')
+
+        const a = appendLink(dateFrom, dateTo, nights)
+        links.push(a)
+      }
+    }
+
+    function clickNextLink() {
+      const a = links.shift()
+      a[0].click()
+
+      if (links.length > 0) {
+        setTimeout(clickNextLink, timeout)
+      }
+    }
+    
+    links.splice(0, 39)
+    // clickNextLink()
+
+
+  </script>
+</body>
+</html>

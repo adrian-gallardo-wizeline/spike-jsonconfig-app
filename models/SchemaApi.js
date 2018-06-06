@@ -68,6 +68,9 @@ class SchemaApi {
 
   extractProps(schema) {
     const props = {}
+    if (!schema.properties) {
+      return props
+    }
     Object.keys(schema.properties).forEach(key => {
       const prop = schema.properties[key]
       if (prop.type === 'object') {
