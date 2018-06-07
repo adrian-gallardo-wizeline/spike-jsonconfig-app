@@ -57,16 +57,14 @@
           <sui-grid-row :columns="hasComposedSchema ? 2 : 1">
             <sui-grid-column>
               <h3 is="sui-header">Schema Editor</h3>
-              <no-ssr>
-                <sui-segment class="jsoneditor-wrapper">
-                  <codemirror 
-                    v-model="jsonSchema"
-                    :options="editorOption"
-                    @change="onCodeChanged"
-                    ref="myEditor"
-                  />
-                </sui-segment>
-              </no-ssr>
+              <sui-segment class="jsoneditor-wrapper">
+                <JsonCodeEditor 
+                  v-model="jsonSchema"
+                  :options="editorOption"
+                  :on-change="onCodeChanged"
+                  ref="myEditor"
+                />
+              </sui-segment>
             </sui-grid-column>
             <sui-grid-column v-if="hasComposedSchema">
               <h3 is="sui-header">Merged schema</h3>
@@ -91,8 +89,10 @@ import schemaTemplate from '~/models/utils/schemaTemplate.json'
 
 import JsonSchema from '~/components/JsonSchema'
 import SchemaSelector from '~/components/SchemaSelector'
+import JsonCodeEditor from '~/components/JsonCodeEditor'
 
 import jsonSchemaV7 from '~/assets/json-schema-v7.json'
+
 
 // import { Validator } from 'jsonschema'
 // const v = new Validator();
@@ -222,6 +222,7 @@ export default {
   components: {
     JsonSchema,
     SchemaSelector,
+    JsonCodeEditor,
   },
   // head: {
   //   link: [
@@ -242,9 +243,9 @@ export default {
 .jsoneditor-wrapper {
   height: 700px;
 }
-.jsoneditor-wrapper /deep/ .vue-codemirror-wrap,
-.jsoneditor-wrapper /deep/ .CodeMirror {
-  height: 100%;
-}
+// .jsoneditor-wrapper /deep/ .vue-codemirror-wrap,
+// .jsoneditor-wrapper /deep/ .CodeMirror {
+//   height: 100%;
+// }
 
 </style>

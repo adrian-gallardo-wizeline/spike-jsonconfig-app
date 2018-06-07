@@ -56,7 +56,6 @@ module.exports = {
     // ['sematic-ui-vue/nuxt', { css: false }] // if you have your own semantic-ui styles
   ],
   plugins: [
-    { src: '~/plugins/vue-codemirror', ssr: false },
     { src: '~/plugins/vue-notifications', ssr: false },
     { src: '~/plugins/vue-elementui' },
     //{ src: '~/plugins/vue-async-computed' },
