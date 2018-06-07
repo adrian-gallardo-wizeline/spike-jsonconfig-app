@@ -1,8 +1,5 @@
 <template>
   <section class="container">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/jsoneditor/5.14.0/jsoneditor.min.css" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsoneditor/5.14.0/jsoneditor.min.js"></script>
-
     <div>
       <h2 is="sui-header" class="heading" textAlign="left" :dividing="true">
         {{ pageTitle }}

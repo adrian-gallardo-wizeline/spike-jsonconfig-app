@@ -11,7 +11,7 @@
 <script>
 
 if (process.browser) {
-  require('@json-editor/json-editor')
+  // require('@json-editor/json-editor')
 }
 
 export default {
@@ -36,17 +36,17 @@ export default {
       disable_edit_json: true,
       disable_properties: true,
     }
+    delete window.ace
     this.editor = new JSONEditor(this.$refs.form, this.options)
 
     if (!this.editor || typeof this.editor.on !== 'function') {
       return
     }
 
-
-    this.editor.on('change', () => {
-      this.info = this.editor.getValue()
-      this.$emit('change', this.editor.getValue())
-    });
+    // this.editor.on('change', () => {
+    //   this.info = this.editor.getValue()
+    //   this.$emit('change', this.editor.getValue())
+    // });
   }
 }
 
