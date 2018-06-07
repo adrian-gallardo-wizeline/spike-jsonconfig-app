@@ -33,6 +33,16 @@
         />
       </div>
 
+      <div class="form-group" v-if="dataFragments.length > 0">
+        <label>Fragments Data</label>
+        <schema-selector 
+          :schemas="dataFragments" 
+          :value="dataFragmentsIds" 
+          @select="updateDataFragments" 
+          multiple
+        />
+      </div>
+
       <no-ssr v-if="hasValidSchema">
         <JsonSchemaForm 
           :schema="jsonSchema" 
@@ -50,6 +60,7 @@ import merge from 'lodash/merge'
 
 import DataApi from '~/models/DataApi'
 import SchemaApi from '~/models/SchemaApi'
+import DataFragmentApi from '~/models/DataFragmentApi'
 
 import JsonSchemaForm from '~/components/JsonSchemaForm'
 import SchemaSelector from '~/components/SchemaSelector'
@@ -66,11 +77,14 @@ export default {
     const config = configId ? await DataApi.get(configId) : {}
 
     config.schema = configId ? await SchemaApi.fetchSchemaHierarchy(config.schema.id) : {}
+
     const schemas = await SchemaApi.getAll()
+    const dataFragments = await DataFragmentApi.getAll()
 
     return {
       config,
       schemas,
+      dataFragments,
       pageTitle: config.name,
     }
   },
@@ -91,13 +105,14 @@ export default {
       return this.config.schema ? SchemaApi.getMergedSchema(this.config.schema) : null
     },
     jsonData() {
-      const data = this.config.jsonData
-      const extractedProps = SchemaApi.extractProps(this.jsonSchema)
-      return merge({}, extractedProps, data)
+      return DataFragmentApi.getMergedConfig(this.config)
     },
     hasValidSchema() {
       return Object.keys(this.jsonSchema || {}).length > 0
-    }
+    },
+    dataFragmentsIds() {
+      return this.config.dataFragments ? this.config.dataFragments.map(dataFragment => dataFragment.id) : null
+    },
   },
   methods: {
     updateJsonData(jsonData) {
@@ -111,6 +126,9 @@ export default {
         this.config = Object.assign({}, this.config, { schema: fullSchema })
       }, 500)
       
+    },
+    updateDataFragments(dataFragments) {
+      this.config = Object.assign({}, this.config, { dataFragments })
     },
     async saveSchema() {
       try {

@@ -36,7 +36,6 @@ export default {
       disable_edit_json: true,
       disable_properties: true,
     }
-    delete window.ace
     this.editor = new JSONEditor(this.$refs.form, this.options)
 
     if (!this.editor || typeof this.editor.on !== 'function') {
@@ -47,6 +46,11 @@ export default {
     //   this.info = this.editor.getValue()
     //   this.$emit('change', this.editor.getValue())
     // });
+  },
+  watch: {
+    data(data) {
+       this.editor.setValue(data)
+    }
   }
 }
 

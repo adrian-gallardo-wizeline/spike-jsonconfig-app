@@ -1,4 +1,7 @@
 import axios from 'axios'
+import merge from 'lodash/merge'
+
+import SchemaApi from '~/models/SchemaApi'
 
 class DataFragmentApi {
 
@@ -23,6 +26,28 @@ class DataFragmentApi {
     shallowData.fragmentSchema = fragmentSchema ? fragmentSchema.id : null
 
     await requestMethod(url, shallowData).then(response => response.data)
+  }
+
+  getMergedConfig(data) {
+    const config = data.jsonData
+    const mergedSchema = SchemaApi.getMergedSchema(data.schema)
+    const extractedProps = SchemaApi.extractProps(mergedSchema)
+    const mergedFragmentsConfig = this.getMergedFragmentsConfig(data.dataFragments)
+    
+    return merge({}, extractedProps, mergedFragmentsConfig, config)
+  }
+
+  getMergedFragmentsConfig(dataFragments) {
+    const config = {}
+    dataFragments.forEach(dataFragment => {
+      const baseProp = dataFragment.fragmentSchema.baseProp
+      const dataFragmentConfig = baseProp ?
+        {[baseProp]: dataFragment.jsonData} :
+        dataFragment.jsonData
+
+      merge(config, dataFragmentConfig)
+    })
+    return config
   }
 }
 
