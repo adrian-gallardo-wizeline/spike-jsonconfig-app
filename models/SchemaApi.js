@@ -10,7 +10,9 @@ class SchemaApi {
   }
 
   async getAll() {
-    return await axios.get(this.endpoint).then(response => response.data)
+
+    return await axios.get('http://api.jsonconfig.com:3333/schemas').then(response => response.data.data)
+    //return await axios.get(this.endpoint).then(response => response.data)
   }
 
   async get(id) {

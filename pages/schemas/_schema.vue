@@ -55,12 +55,12 @@
             <sui-grid-column>
               <h3 is="sui-header">Schema Editor</h3>
               <sui-segment class="jsoneditor-wrapper">
-                <JsonCodeEditor 
+                <!-- <JsonCodeEditor 
                   v-model="jsonSchema"
                   :options="editorOption"
                   :on-change="onCodeChanged"
                   ref="myEditor"
-                />
+                /> -->
               </sui-segment>
             </sui-grid-column>
             <sui-grid-column v-if="hasComposedSchema">
@@ -86,7 +86,7 @@ import schemaTemplate from '~/models/utils/schemaTemplate.json'
 
 import JsonSchema from '~/components/JsonSchema'
 import SchemaSelector from '~/components/SchemaSelector'
-import JsonCodeEditor from '~/components/JsonCodeEditor'
+// import JsonCodeEditor from '~/components/JsonCodeEditor'
 
 import jsonSchemaV7 from '~/assets/json-schema-v7.json'
 
@@ -219,7 +219,7 @@ export default {
   components: {
     JsonSchema,
     SchemaSelector,
-    JsonCodeEditor,
+    // JsonCodeEditor,
   },
   // head: {
   //   link: [
