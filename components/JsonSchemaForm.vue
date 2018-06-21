@@ -42,10 +42,10 @@ export default {
       return
     }
 
-    // this.editor.on('change', () => {
-    //   this.info = this.editor.getValue()
-    //   this.$emit('change', this.editor.getValue())
-    // });
+    this.editor.on('change', () => {
+      this.info = this.editor.getValue()
+      this.$emit('change', this.editor.getValue())
+    });
   },
   watch: {
     data(data) {

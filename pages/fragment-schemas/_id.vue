@@ -29,21 +29,17 @@
         <input type="text" class="form-control" id="name" placeholder="Enter key prop for this JSON schema" v-model="fragmentData.baseProp">
       </div>
 
-      <no-ssr>
-        <div>
+      <div>
           <h3 is="sui-header">Schema Editor</h3>
           <sui-segment class="jsoneditor-wrapper">
-            <codemirror 
-              v-model="jsonSchema"
+            <JsonCodeEditor 
+              :schema="jsonSchema"
               :options="editorConfig"
-              @change="onCodeChanged"
+              :on-change="onCodeChanged"
               ref="myEditor"
-            >
-            </codemirror>   
+            /> 
           </sui-segment>
         </div>
-        
-      </no-ssr>
       
     </div>
   </section>
@@ -54,6 +50,7 @@
 import FragmentSchemaApi from '~/models/FragmentSchemaApi'
 import schemaTemplate from '~/models/utils/schemaTemplate.json'
 import jsonSchemaV7 from '~/assets/json-schema-v7'
+import JsonCodeEditor from '~/components/JsonCodeEditor'
 
 import Ajv from 'ajv'
 const ajv = new Ajv()
@@ -133,6 +130,9 @@ export default {
       }
     }
   },
+  components: {
+    JsonCodeEditor,
+  }
 }
 </script>
 

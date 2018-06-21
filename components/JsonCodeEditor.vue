@@ -1,7 +1,7 @@
 <template>
   <no-ssr class="json-code-editor">
     <codemirror 
-      v-model="value"
+      v-model="jsonSchema"
       :options="options"
       @change="onChange"
       ref="myEditor"
@@ -10,6 +10,7 @@
 </template>
 
 <script>
+import cloneDeep from 'lodash/cloneDeep'
 const components = {}
 
 if (process.browser) {
@@ -25,7 +26,15 @@ if (process.browser) {
 }
 
 export default {
-  props: ['value', 'options', 'onChange'],
+  props: ['schema', 'options', 'onChange'],
+  data() {
+    return {
+      jsonSchema: {},
+    }
+  },
+  created() {
+    this.jsonSchema = cloneDeep(this.schema)
+  },
   components,
 }
 </script>

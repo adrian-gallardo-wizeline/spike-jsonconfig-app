@@ -23,6 +23,9 @@ class DataFragmentApi {
 
     const { dataFragments, schema, ...shallowData } = data
     shallowData.schema = schema ? schema.id : null
+    shallowData.dataFragments = dataFragments ?
+      dataFragments.map(dataFragment => dataFragment.id) :
+      []
 
     await requestMethod(url, shallowData).then(response => response.data)
   }

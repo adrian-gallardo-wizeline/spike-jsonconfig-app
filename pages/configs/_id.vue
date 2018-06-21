@@ -42,7 +42,7 @@
           multiple
         />
       </div>
-
+      <!-- <pre>{{ JSON.stringify(jsonSchema, null, 2) }}</pre> -->
       <no-ssr v-if="hasValidSchema">
         <JsonSchemaForm 
           :schema="jsonSchema" 
@@ -75,6 +75,7 @@ export default {
   async asyncData({params}) {
     const configId = parseInt(params.id)
     const config = configId ? await DataApi.get(configId) : {}
+    const configName = config.name
 
     config.schema = configId ? await SchemaApi.fetchSchemaHierarchy(config.schema.id) : {}
 
@@ -85,7 +86,7 @@ export default {
       config,
       schemas,
       dataFragments,
-      pageTitle: config.name,
+      configName,
     }
   },
   data() {
@@ -129,6 +130,7 @@ export default {
     },
     updateDataFragments(dataFragments) {
       this.config = Object.assign({}, this.config, { dataFragments })
+      console.log(this.config)
     },
     async saveSchema() {
       try {

@@ -27,7 +27,6 @@ export default {
   white-space: pre;
   display: block;
   height: 100%;
-  overflow-y: scroll;
-  overflow-x: hidden;
+  overflow: scroll;
 }
 </style>

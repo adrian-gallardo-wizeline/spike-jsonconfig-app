@@ -1,5 +1,7 @@
 import axios from 'axios'
 import merge from 'lodash/merge'
+import defaultsDeep from 'lodash/defaultsDeep'
+import cloneDeep from 'lodash/cloneDeep'
 
 import SchemaApi from '~/models/SchemaApi'
 
@@ -33,11 +35,11 @@ class DataFragmentApi {
     const mergedSchema = SchemaApi.getMergedSchema(data.schema)
     const extractedProps = SchemaApi.extractProps(mergedSchema)
     const mergedFragmentsConfig = this.getMergedFragmentsConfig(data.dataFragments)
-    
-    return merge({}, extractedProps, mergedFragmentsConfig, config)
+
+    return merge({}, extractedProps, config, mergedFragmentsConfig)
   }
 
-  getMergedFragmentsConfig(dataFragments) {
+  getMergedFragmentsConfig(dataFragments = []) {
     const config = {}
     dataFragments.forEach(dataFragment => {
       const baseProp = dataFragment.fragmentSchema.baseProp

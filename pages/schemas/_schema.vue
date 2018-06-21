@@ -55,12 +55,12 @@
             <sui-grid-column>
               <h3 is="sui-header">Schema Editor</h3>
               <sui-segment class="jsoneditor-wrapper">
-                <!-- <JsonCodeEditor 
-                  v-model="jsonSchema"
+                <JsonCodeEditor 
+                  :schema="jsonSchema"
                   :options="editorOption"
                   :on-change="onCodeChanged"
                   ref="myEditor"
-                /> -->
+                />
               </sui-segment>
             </sui-grid-column>
             <sui-grid-column v-if="hasComposedSchema">
@@ -75,10 +75,6 @@
 </template>
 
 <script>
-
-// import VueJsonPretty from 'vue-json-pretty'
-// import VueAceEditor from 'vue2-ace-editor'
-// import VJsoneditor from 'vue-jsoneditor';
 import SchemaApi from '~/models/SchemaApi'
 import FragmentSchemaApi from '~/models/FragmentSchemaApi'
 import Schema from '~/models/Schema'
@@ -86,16 +82,9 @@ import schemaTemplate from '~/models/utils/schemaTemplate.json'
 
 import JsonSchema from '~/components/JsonSchema'
 import SchemaSelector from '~/components/SchemaSelector'
-// import JsonCodeEditor from '~/components/JsonCodeEditor'
+import JsonCodeEditor from '~/components/JsonCodeEditor'
 
 import jsonSchemaV7 from '~/assets/json-schema-v7.json'
-
-
-// import { Validator } from 'jsonschema'
-// const v = new Validator();
-// const instance = {
-//   "name": "Jeremy Dorn"
-// }
 
 import Ajv from 'ajv'
 const ajv = new Ajv()
@@ -191,11 +180,7 @@ export default {
       this.error = error
     },
     async save() {
-      const jsonSchema = this.validateJSONSchema()
-      if (!jsonSchema) {
-        return
-      }
-      this.schemaData.jsonSchema = jsonSchema
+      console.log(this.schemaData.jsonSchema)
       try {
         await SchemaApi.save(this.schemaData)
         this.schemaName = this.schemaData.name,
@@ -219,16 +204,8 @@ export default {
   components: {
     JsonSchema,
     SchemaSelector,
-    // JsonCodeEditor,
+    JsonCodeEditor,
   },
-  // head: {
-  //   link: [
-  //     { rel: 'stylesheet', href: 'https://cdnjs.cloudflare.com/ajax/libs/jsoneditor/5.14.0/jsoneditor.min.css' },
-  //   ],
-  //   script: [
-  //     { src: 'https://cdnjs.cloudflare.com/ajax/libs/jsoneditor/5.14.0/jsoneditor.min.js' },
-  //   ]
-  // }
 }
 </script>
 
