@@ -38,6 +38,16 @@
         />
       </div>
 
+      <div class="form-group" v-if="dataFragments.length > 0">
+        <label>Fragments Data</label>
+        <schema-selector 
+          :schemas="dataFragments" 
+          :value="dataFragmentsIds" 
+          @select="updateDataFragments" 
+          multiple
+        />
+      </div>
+
         <div class="row">
           <div class="col-sm">
             <div class="form-group">
@@ -83,27 +93,16 @@
                   </sui-form-field>
                 </sui-form-fields>
               </sui-form>
-      </div>
+            </div>
           </div>
-          
-          
         </div>
+
+      <div class="form-group">
+        <label>Changelog</label>
+        <textarea class="form-control" v-model="changelog"></textarea>
+      </div>
       
 
-      
-
-      
-      
-
-      <!-- <div class="form-group" v-if="dataFragments.length > 0">
-        <label>Fragments Data</label>
-        <schema-selector 
-          :schemas="dataFragments" 
-          :value="dataFragmentsIds" 
-          @select="updateDataFragments" 
-          multiple
-        />
-      </div> -->
       <!-- <pre>{{ JSON.stringify(jsonSchema, null, 2) }}</pre> -->
       <no-ssr v-if="hasValidSchema">
         <JsonSchemaForm 
@@ -145,6 +144,11 @@ export default {
     const dataFragments = await DataFragmentApi.getAll()
     const currentVersion = config.version || "1.0.0"
 
+    delete config.jsonData.googleTagManager
+    delete config.jsonData.tealium
+
+    console.log(config.jsonData)
+
     return {
       config,
       schemas,
@@ -158,6 +162,7 @@ export default {
       error: null,
       editorConfig: process.env.CODEMIRROR_CONFIG,
       bumpVersion: 3,
+      changelog: '',
     }
   },
   computed: {
@@ -218,6 +223,8 @@ export default {
     async saveSchema() {
       try {
         this.config.version = this.bumpedVersion
+        this.config.changelog = this.changelog
+
         await DataApi.save(this.config)
 
         this.$notify({

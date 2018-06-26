@@ -7,14 +7,18 @@
       <sui-table striped>
         <sui-table-header>
           <sui-table-row>
-            <sui-table-header-cell :width="10">Version</sui-table-header-cell>
+            <sui-table-header-cell :width="3">Version</sui-table-header-cell>
+            <sui-table-header-cell :width="7">Changelog</sui-table-header-cell>
             <sui-table-header-cell :width="3">Created At</sui-table-header-cell>
             <sui-table-header-cell :width="3"></sui-table-header-cell>
           </sui-table-row>
         </sui-table-header>
         <sui-table-body>
           <sui-table-row v-for="configSnapshot of configSnapshots" :key="configSnapshot.id">
-            <sui-table-cell :width="10">{{ configSnapshot.version }}</sui-table-cell>
+            <sui-table-cell :width="3">{{ configSnapshot.version }}</sui-table-cell>
+            <sui-table-cell :width="7">
+              <pre>{{ configSnapshot.changelog }}</pre>
+            </sui-table-cell>
             <sui-table-cell :width="3">{{ getSnapshotDate(configSnapshot) }}</sui-table-cell>
             <sui-table-cell :width="3" textAlign="center">
               <a :href="getSnapshotUrl(configSnapshot)" target="_blank">

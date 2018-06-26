@@ -1,5 +1,6 @@
 import axios from 'axios'
 import merge from 'lodash/merge'
+import setProp from 'lodash/set'
 import defaultsDeep from 'lodash/defaultsDeep'
 import cloneDeep from 'lodash/cloneDeep'
 
@@ -42,11 +43,11 @@ class DataFragmentApi {
   getMergedFragmentsConfig(dataFragments = []) {
     const config = {}
     dataFragments.forEach(dataFragment => {
-      const baseProp = dataFragment.fragmentSchema.baseProp
+      const baseProp = dataFragment.fragmentSchema.baseProp || 'tenancy.analytics' // TODO: REMOVE HARDCODED VALUE
       const dataFragmentConfig = baseProp ?
-        {[baseProp]: dataFragment.jsonData} :
+        setProp({}, baseProp, dataFragment.jsonData) :
         dataFragment.jsonData
-
+      
       merge(config, dataFragmentConfig)
     })
     return config

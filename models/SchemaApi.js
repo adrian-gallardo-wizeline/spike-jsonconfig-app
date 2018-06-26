@@ -1,6 +1,7 @@
 import axios from 'axios'
 import FragmentSchemaApi from '~/models/FragmentSchemaApi'
 import merge from 'lodash/merge'
+import setProp from 'lodash/set'
 import Schema from './Schema';
 
 class SchemaApi {
@@ -46,7 +47,7 @@ class SchemaApi {
       if (schema.composedFragments) {
         schema.composedFragments.forEach(fragment => {
           const fragmentSchema = fragment.baseProp ?
-            {properties: {[fragment.baseProp]: fragment.jsonSchema}} :
+            {properties: setProp({}, fragment.baseProp, fragment.jsonSchema)} :
             fragment.jsonSchema
           currentSchema = merge({}, currentSchema, fragmentSchema)
         })

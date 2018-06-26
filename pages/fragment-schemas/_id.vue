@@ -83,7 +83,11 @@ export default {
   },
   methods: {
     onCodeChanged(jsonSchema) {
-      this.validateJSONSchema(jsonSchema)
+      console.log(jsonSchema)
+      const validSchema = this.validateJSONSchema(jsonSchema)
+      if (validSchema) {
+        this.jsonSchema = JSON.stringify(validSchema)
+      }
     },
     validateJSONSchema(jsonSchema = null) {
       this.setError(null)
@@ -105,7 +109,7 @@ export default {
       this.error = error
     },
     async save() {
-      const jsonSchema = this.validateJSONSchema()
+      const jsonSchema = this.validateJSONSchema(this.jsonSchema)
       if (!jsonSchema) {
         return
       }
