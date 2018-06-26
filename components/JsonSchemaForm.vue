@@ -59,8 +59,40 @@ export default {
 <style lang="scss" scoped>
 .json-schema-form {
   & /deep/ .card {
-    padding: 35px;
-    margin-bottom: 35px;
+    padding: 20px;
+    margin: 0 0 20px;
+    border: none;
+    border-bottom: 1px dotted silver;
+    border-radius: 0;
+  }
+  & /deep/ .btn-group {
+    border-radius: 0;
+    margin-bottom: 20px;
+  }
+  & /deep/ [type="button"] {
+    border: none;
+    font-size: 12px;
+    padding: 5px 8px;
+    margin-right: 8px;
+    border-radius: 0;
+  }
+
+  & /deep/ {
+    .card-block {
+      background: #f7f7f7;
+    }
+    .card-block .card-block .card-block .card-block .card-block {
+      background: #b5b5b5;
+    }
+    .card-block .card-block .card-block .card-block {
+      background: #ccc;
+    }
+    .card-block .card-block .card-block {
+      background: #dedede;
+    }
+    .card-block .card-block {
+      background: #efefef;
+    }
   }
 }
 </style>

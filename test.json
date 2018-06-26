@@ -1,0 +1,623 @@
+{
+  "type": "object",
+  "definitions": {},
+  "properties": {
+    "tenancy": {
+      "id": "/properties/tenancy",
+      "type": "object",
+      "properties": {
+        "cdnUrl": {
+          "id": "/properties/tenancy/properties/cdnUrl",
+          "type": "string",
+          "title": "CDN URL",
+          "default": "",
+          "examples": [
+            ""
+          ]
+        },
+        "clientAggregationApiKey": {
+          "id": "/properties/tenancy/properties/clientAggregationApiKey",
+          "type": "string",
+          "title": "Client Aggregation Api Key",
+          "default": "",
+          "examples": [
+            "OQg14wSkwkcyeZvsmZbv410LlD3rvn3b"
+          ]
+        },
+        "serverSideAggregationApiKey": {
+          "id": "/properties/tenancy/properties/serverSideAggregationApiKey",
+          "type": "string",
+          "title": "Server Aggregation Api Key",
+          "default": "",
+          "examples": [
+            ""
+          ]
+        },
+        "sitemaps": {
+          "id": "/properties/tenancy/properties/sitemaps",
+          "type": "array",
+          "items": {
+            "id": "/properties/tenancy/properties/sitemaps/items",
+            "type": "string",
+            "title": "Sitemaps",
+            "default": "",
+            "examples": [
+              "https://relay.nationalgeographic.com/proxy/distribution/public/sitemap/%NATGEO_DOMAIN%/index.xml",
+              "https://relay.nationalgeographic.com/proxy/distribution/public/sitemap/%NATGEO_DOMAIN%/news.xml"
+            ]
+          }
+        },
+        "aggregationApiUrl": {
+          "id": "/properties/tenancy/properties/aggregationApiUrl",
+          "type": "string",
+          "title": "Aggregation Api URL",
+          "default": "",
+          "examples": [
+            "https://api.nationalgeographic.com/aggregation/v1/pages"
+          ]
+        },
+        "language": {
+          "id": "/properties/tenancy/properties/language",
+          "type": "string",
+          "title": "Language",
+          "default": "",
+          "examples": [
+            "en-GB"
+          ]
+        },
+        "textDirection": {
+          "id": "/properties/tenancy/properties/textDirection",
+          "type": "string",
+          "title": "Text Direction",
+          "default": "",
+          "examples": [
+            "ltr"
+          ]
+        },
+        "ads": {
+          "id": "/properties/tenancy/properties/ads",
+          "type": "object",
+          "properties": {
+            "freewheel": {
+              "id": "/properties/tenancy/properties/ads/properties/freewheel",
+              "type": "object",
+              "properties": {
+                "name": {
+                  "id": "/properties/tenancy/properties/ads/properties/freewheel/properties/name",
+                  "type": "string",
+                  "title": "Name",
+                  "default": "",
+                  "examples": [
+                    "Freewheel"
+                  ]
+                },
+                "env": {
+                  "id": "/properties/tenancy/properties/ads/properties/freewheel/properties/env",
+                  "type": "object",
+                  "properties": {
+                    "prod": {
+                      "id": "/properties/tenancy/properties/ads/properties/freewheel/properties/env/properties/prod",
+                      "type": "object",
+                      "properties": {
+                        "networkId": {
+                          "id": "/properties/tenancy/properties/ads/properties/freewheel/properties/env/properties/prod/properties/networkId",
+                          "type": "string",
+                          "title": "Network ID",
+                          "default": "",
+                          "examples": [
+                            "511407"
+                          ]
+                        },
+                        "subdomain": {
+                          "id": "/properties/tenancy/properties/ads/properties/freewheel/properties/env/properties/prod/properties/subdomain",
+                          "type": "string",
+                          "title": "Subdomain",
+                          "default": "",
+                          "examples": [
+                            "7cdaf"
+                          ]
+                        },
+                        "profile": {
+                          "id": "/properties/tenancy/properties/ads/properties/freewheel/properties/env/properties/prod/properties/profile",
+                          "type": "string",
+                          "title": "Profile",
+                          "default": "",
+                          "examples": [
+                            "511407:natgeo_intl_display_linktag2_live"
+                          ]
+                        }
+                      }
+                    },
+                    "test": {
+                      "id": "/properties/tenancy/properties/ads/properties/freewheel/properties/env/properties/test",
+                      "type": "object",
+                      "properties": {
+                        "networkId": {
+                          "id": "/properties/tenancy/properties/ads/properties/freewheel/properties/env/properties/test/properties/networkId",
+                          "type": "string",
+                          "title": "Network ID",
+                          "default": "",
+                          "examples": [
+                            "511406"
+                          ]
+                        },
+                        "subdomain": {
+                          "id": "/properties/tenancy/properties/ads/properties/freewheel/properties/env/properties/test/properties/subdomain",
+                          "type": "string",
+                          "title": "Subdomain",
+                          "default": "",
+                          "examples": [
+                            "7cdae"
+                          ]
+                        },
+                        "profile": {
+                          "id": "/properties/tenancy/properties/ads/properties/freewheel/properties/env/properties/test/properties/profile",
+                          "type": "string",
+                          "title": "Profile",
+                          "default": "",
+                          "examples": [
+                            "null"
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "preRoll": {
+                  "id": "/properties/tenancy/properties/ads/properties/freewheel/properties/preRoll",
+                  "type": "object",
+                  "properties": {
+                    "policyID": {
+                      "id": "/properties/tenancy/properties/ads/properties/freewheel/properties/preRoll/properties/policyID",
+                      "type": "string",
+                      "title": "Policy ID",
+                      "default": "",
+                      "examples": [
+                        "24218898"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "analytics": {
+          "id": "/properties/tenancy/properties/analytics",
+          "type": "object",
+          "properties": {
+            "googleTagManager": {
+              "id": "/properties/tenancy/properties/analytics/properties/googleTagManager",
+              "type": "object",
+              "properties": {
+                "id": {
+                  "id": "/properties/tenancy/properties/analytics/properties/googleTagManager/properties/id",
+                  "type": "string",
+                  "title": "Google Tag Manager ID",
+                  "default": "",
+                  "examples": [
+                    ""
+                  ]
+                }
+              }
+            },
+            "tealium": {
+              "id": "/properties/tenancy/properties/analytics/properties/tealium",
+              "type": "object",
+              "properties": {
+                "scriptUrl": {
+                  "id": "/properties/tenancy/properties/analytics/properties/tealium/properties/scriptUrl",
+                  "type": "string",
+                  "title": "Script URL",
+                  "default": "",
+                  "examples": [
+                    "https://tags.tiqcdn.com/utag/fox/natgeo/dev/utag.js"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "cacheControl": {
+          "id": "/properties/tenancy/properties/cacheControl",
+          "type": "string",
+          "title": "Cache Control",
+          "default": "",
+          "examples": [
+            "max-age: 3600"
+          ]
+        },
+        "domain": {
+          "id": "/properties/tenancy/properties/domain",
+          "type": "string",
+          "title": "Domain",
+          "default": "",
+          "examples": [
+            "www.nationalgeographic.co.uk"
+          ]
+        },
+        "locale": {
+          "id": "/properties/tenancy/properties/locale",
+          "type": "object",
+          "properties": {
+            "abbreviation": {
+              "id": "/properties/tenancy/properties/locale/properties/abbreviation",
+              "type": "string",
+              "title": "Abbreviation",
+              "default": "",
+              "examples": [
+                "uk"
+              ]
+            },
+            "country": {
+              "id": "/properties/tenancy/properties/locale/properties/country",
+              "type": "string",
+              "title": "Country",
+              "default": "",
+              "examples": [
+                "United Kingdom"
+              ]
+            },
+            "language": {
+              "id": "/properties/tenancy/properties/locale/properties/language",
+              "type": "string",
+              "title": "Language",
+              "default": "",
+              "examples": [
+                "en-UK"
+              ]
+            }
+          }
+        },
+        "monitoring": {
+          "id": "/properties/tenancy/properties/monitoring",
+          "type": "object",
+          "properties": {
+            "splunk": {
+              "id": "/properties/tenancy/properties/monitoring/properties/splunk",
+              "type": "object",
+              "properties": {
+                "enabled": {
+                  "id": "/properties/tenancy/properties/monitoring/properties/splunk/properties/enabled",
+                  "type": "boolean",
+                  "title": "Enabled",
+                  "default": false,
+                  "examples": [
+                    false
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "natgeoBaseUrl": {
+          "id": "/properties/tenancy/properties/natgeoBaseUrl",
+          "type": "string",
+          "title": "Natgeo Base URL",
+          "default": "",
+          "examples": [
+            "https://www.nationalgeographic.co.uk"
+          ]
+        },
+        "navBarProps": {
+          "id": "/properties/tenancy/properties/navBarProps",
+          "type": "object",
+          "properties": {
+            "showMenu": {
+              "id": "/properties/tenancy/properties/navBarProps/properties/showMenu",
+              "type": "boolean",
+              "title": "Show Menu",
+              "default": false,
+              "examples": [
+                true
+              ]
+            },
+            "loadRegistration": {
+              "id": "/properties/tenancy/properties/navBarProps/properties/loadRegistration",
+              "type": "boolean",
+              "title": "Load Registration",
+              "default": false,
+              "examples": [
+                true
+              ]
+            },
+            "showSearch": {
+              "id": "/properties/tenancy/properties/navBarProps/properties/showSearch",
+              "type": "boolean",
+              "title": "Show Search",
+              "default": false,
+              "examples": [
+                false
+              ]
+            },
+            "showShop": {
+              "id": "/properties/tenancy/properties/navBarProps/properties/showShop",
+              "type": "boolean",
+              "title": "Show Shop",
+              "default": false,
+              "examples": [
+                false
+              ]
+            },
+            "showSubscribe": {
+              "id": "/properties/tenancy/properties/navBarProps/properties/showSubscribe",
+              "type": "boolean",
+              "title": "Show Subscribe",
+              "default": false,
+              "examples": [
+                false
+              ]
+            },
+            "showSubheading": {
+              "id": "/properties/tenancy/properties/navBarProps/properties/showSubheading",
+              "type": "boolean",
+              "title": "Show Subheading",
+              "default": false,
+              "examples": [
+                true
+              ]
+            },
+            "showExtraLinks": {
+              "id": "/properties/tenancy/properties/navBarProps/properties/showExtraLinks",
+              "type": "boolean",
+              "title": "Show Extra Links",
+              "default": false,
+              "examples": [
+                true
+              ]
+            },
+            "extraLinks": {
+              "id": "/properties/tenancy/properties/navBarProps/properties/extraLinks",
+              "type": "array",
+              "items": {
+                "id": "/properties/tenancy/properties/navBarProps/properties/extraLinks/items",
+                "type": "object",
+                "properties": {
+                  "show": {
+                    "id": "/properties/tenancy/properties/navBarProps/properties/extraLinks/items/properties/show",
+                    "type": "boolean",
+                    "title": "Show",
+                    "default": false,
+                    "examples": [
+                      true
+                    ]
+                  },
+                  "anchorText": {
+                    "id": "/properties/tenancy/properties/navBarProps/properties/extraLinks/items/properties/anchorText",
+                    "type": "string",
+                    "title": "Anchor Text",
+                    "default": "",
+                    "examples": [
+                      "Where to Watch"
+                    ]
+                  },
+                  "anchorURL": {
+                    "id": "/properties/tenancy/properties/navBarProps/properties/extraLinks/items/properties/anchorURL",
+                    "type": "string",
+                    "title": "Anchor URL",
+                    "default": "",
+                    "examples": [
+                      "/where-to-watch"
+                    ]
+                  }
+                }
+              }
+            },
+            "endpoint": {
+              "id": "/properties/tenancy/properties/navBarProps/properties/endpoint",
+              "type": "string",
+              "title": "Endpoint",
+              "default": "",
+              "examples": [
+                "https://appservices-staging.nationalgeographic.com/api/v1/globalnav/grouped/?topnav=chip-top-nav&contextualnav=chip-dev-nav&sitemenu=chip-test-nav&show_card"
+              ]
+            }
+          }
+        },
+        "notFoundPage": {
+          "id": "/properties/tenancy/properties/notFoundPage",
+          "type": "string",
+          "title": "Notfound Page",
+          "default": "",
+          "examples": [
+            "/404"
+          ]
+        },
+        "social": {
+          "id": "/properties/tenancy/properties/social",
+          "type": "object",
+          "properties": {
+            "twitter": {
+              "id": "/properties/tenancy/properties/social/properties/twitter",
+              "type": "object",
+              "properties": {
+                "url": {
+                  "id": "/properties/tenancy/properties/social/properties/twitter/properties/url",
+                  "type": "string",
+                  "title": "URL",
+                  "default": "",
+                  "examples": [
+                    "https://twitter.com/NatGeoUK"
+                  ]
+                },
+                "key": {
+                  "id": "/properties/tenancy/properties/social/properties/twitter/properties/key",
+                  "type": "string",
+                  "title": "Key",
+                  "default": "",
+                  "examples": [
+                    "twitter.com/NatGeoUK"
+                  ]
+                }
+              }
+            },
+            "instagram": {
+              "id": "/properties/tenancy/properties/social/properties/instagram",
+              "type": "object",
+              "properties": {
+                "url": {
+                  "id": "/properties/tenancy/properties/social/properties/instagram/properties/url",
+                  "type": "string",
+                  "title": "URL",
+                  "default": "",
+                  "examples": [
+                    "https://www.instagram.com/natgeouk/"
+                  ]
+                },
+                "key": {
+                  "id": "/properties/tenancy/properties/social/properties/instagram/properties/key",
+                  "type": "string",
+                  "title": "Key",
+                  "default": "",
+                  "examples": [
+                    "instagram.com/natgeouk"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "video": {
+          "id": "/properties/tenancy/properties/video",
+          "type": "object",
+          "properties": {
+            "providers": {
+              "id": "/properties/tenancy/properties/video/properties/providers",
+              "type": "array",
+              "items": {
+                "id": "/properties/tenancy/properties/video/properties/providers/items",
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "id": "/properties/tenancy/properties/video/properties/providers/items/properties/name",
+                    "type": "string",
+                    "title": "Name",
+                    "default": "",
+                    "examples": [
+                      "MPX"
+                    ]
+                  },
+                  "defaultAdNetwork": {
+                    "id": "/properties/tenancy/properties/video/properties/providers/items/properties/defaultAdNetwork",
+                    "type": "string",
+                    "title": "Defaultad Network",
+                    "default": "",
+                    "examples": [
+                      "Freewheel"
+                    ]
+                  },
+                  "account": {
+                    "id": "/properties/tenancy/properties/video/properties/providers/items/properties/account",
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "id": "/properties/tenancy/properties/video/properties/providers/items/properties/account/properties/name",
+                        "type": "string",
+                        "title": "Name",
+                        "default": "",
+                        "examples": [
+                          "ngp"
+                        ]
+                      },
+                      "accountId": {
+                        "id": "/properties/tenancy/properties/video/properties/providers/items/properties/account/properties/accountId",
+                        "type": "string",
+                        "title": "Account ID",
+                        "default": "",
+                        "examples": [
+                          "XRRASC"
+                        ]
+                      },
+                      "lang": {
+                        "id": "/properties/tenancy/properties/video/properties/providers/items/properties/account/properties/lang",
+                        "type": "string",
+                        "title": "Language",
+                        "default": "",
+                        "examples": [
+                          "uk"
+                        ]
+                      }
+                    }
+                  },
+                  "playerUrls": {
+                    "id": "/properties/tenancy/properties/video/properties/providers/items/properties/playerUrls",
+                    "type": "object",
+                    "properties": {
+                      "foxDev": {
+                        "id": "/properties/tenancy/properties/video/properties/providers/items/properties/playerUrls/properties/foxDev",
+                        "type": "string",
+                        "title": "Fox Dev",
+                        "default": "",
+                        "examples": [
+                          "https://videoplayer-qa.int.ngeo.com/v1.9.6/?network=ngp-global-sites"
+                        ]
+                      },
+                      "foxQA": {
+                        "id": "/properties/tenancy/properties/video/properties/providers/items/properties/playerUrls/properties/foxQA",
+                        "type": "string",
+                        "title": "Fox Qa",
+                        "default": "",
+                        "examples": [
+                          "https://videoplayer.nationalgeographic.com/v1.9.6/qa?network=ngp-global-sites"
+                        ]
+                      },
+                      "stable": {
+                        "id": "/properties/tenancy/properties/video/properties/providers/items/properties/playerUrls/properties/stable",
+                        "type": "string",
+                        "title": "Stable",
+                        "default": "",
+                        "examples": [
+                          "https://videoplayer.nationalgeographic.com/v1.9.6/?network=ngp-global-sites"
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "serverAggregationApiKey": {
+          "id": "/properties/tenancy/properties/serverAggregationApiKey",
+          "type": "string",
+          "title": "Server Aggregation Api Key",
+          "default": "",
+          "examples": [
+            "NAQoa0treifoFzv2lWBk7CuXYSG1AZKK"
+          ]
+        }
+      }
+    },
+    "server": {
+      "id": "/properties/server",
+      "type": "object",
+      "properties": {
+        "featureFlagging": {
+          "id": "/properties/server/properties/featureFlagging",
+          "type": "object",
+          "properties": {
+            "client": {
+              "id": "/properties/server/properties/featureFlagging/properties/client",
+              "type": "object",
+              "properties": {
+                "clientId": {
+                  "id": "/properties/server/properties/featureFlagging/properties/client/properties/clientId",
+                  "type": "null",
+                  "title": "Client ID",
+                  "default": null,
+                  "examples": [
+                    null
+                  ]
+                },
+                "options": {
+                  "id": "/properties/server/properties/featureFlagging/properties/client/properties/options",
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -14,14 +14,19 @@
         {{error}}
       </div>
 
-      <div class="form-group">
-        <label for="name">Name</label>
-        <input type="text" class="form-control" id="name" placeholder="Enter name" v-model="config.name">
-      </div>
-
-      <div class="form-group">
-        <label for="version">Version</label>
-        <input type="text" class="form-control" id="version" placeholder="Enter version" v-model="config.version" readonly>
+      <div class="row">
+        <div class="col-sm">
+          <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" class="form-control" id="name" placeholder="Enter name" v-model="config.name">
+          </div>
+        </div>
+        <div class="col-sm">
+          <div class="form-group">
+            <label for="name">Identifier</label>
+            <input type="text" class="form-control" id="name" placeholder="Enter identifier" v-model="config.identifier">
+          </div>
+        </div>
       </div>
 
       <div class="form-group" v-if="schemas.length > 0">
@@ -33,7 +38,64 @@
         />
       </div>
 
-      <div class="form-group" v-if="dataFragments.length > 0">
+        <div class="row">
+          <div class="col-sm">
+            <div class="form-group">
+              <label for="version">Current Version</label>
+              <input type="text" class="form-control" id="version" placeholder="Enter version" v-model="currentVersion" readonly>
+            </div>
+          </div>
+          <div class="col-sm" v-if="config.id">
+            <div class="form-group">
+              <label for="version">Next Version</label>
+              <input type="text" class="form-control" id="version" placeholder="Enter version" :value="bumpedVersion" readonly>
+            </div>
+          </div>
+          <div class="col-sm" v-if="config.id">
+            <div class="form-group">
+              <label for="version">Bump Version</label>
+        
+              <sui-form style="padding-top: 10px;">
+                <sui-form-fields inline>
+                  <sui-form-field>
+                    <sui-checkbox
+                      label="Mayor"
+                      radio
+                      :value="1"
+                      v-model="bumpVersion"
+                    />
+                  </sui-form-field>
+                  <sui-form-field>
+                    <sui-checkbox
+                      label="Minor"
+                      radio
+                      :value="2"
+                      v-model="bumpVersion"
+                    />
+                  </sui-form-field>
+                  <sui-form-field>
+                    <sui-checkbox
+                      label="Patch"
+                      radio
+                      :value="3"
+                      v-model="bumpVersion"
+                    />
+                  </sui-form-field>
+                </sui-form-fields>
+              </sui-form>
+      </div>
+          </div>
+          
+          
+        </div>
+      
+
+      
+
+      
+      
+
+      <!-- <div class="form-group" v-if="dataFragments.length > 0">
         <label>Fragments Data</label>
         <schema-selector 
           :schemas="dataFragments" 
@@ -41,7 +103,7 @@
           @select="updateDataFragments" 
           multiple
         />
-      </div>
+      </div> -->
       <!-- <pre>{{ JSON.stringify(jsonSchema, null, 2) }}</pre> -->
       <no-ssr v-if="hasValidSchema">
         <JsonSchemaForm 
@@ -81,18 +143,21 @@ export default {
 
     const schemas = await SchemaApi.getAll()
     const dataFragments = await DataFragmentApi.getAll()
+    const currentVersion = config.version || "1.0.0"
 
     return {
       config,
       schemas,
       dataFragments,
       configName,
+      currentVersion,
     }
   },
   data() {
     return {
       error: null,
       editorConfig: process.env.CODEMIRROR_CONFIG,
+      bumpVersion: 3,
     }
   },
   computed: {
@@ -114,6 +179,24 @@ export default {
     dataFragmentsIds() {
       return this.config.dataFragments ? this.config.dataFragments.map(dataFragment => dataFragment.id) : null
     },
+    bumpedVersion() {
+      const parts = this.currentVersion.split('.')
+      let major = parseInt(parts[0])
+      let minor = parseInt(parts[1])
+      let patch = parseInt(parts[2])
+
+      if (this.bumpVersion === 1) {
+        major++
+        minor = 0
+        patch = 0
+      } else if (this.bumpVersion === 2) {
+        minor++
+        patch = 0
+      } else {
+        patch++
+      }
+      return [major, minor, patch].join('.')
+    }
   },
   methods: {
     updateJsonData(jsonData) {
@@ -134,8 +217,8 @@ export default {
     },
     async saveSchema() {
       try {
+        this.config.version = this.bumpedVersion
         await DataApi.save(this.config)
-        this.pageTitle = this.config.name,
 
         this.$notify({
           title: 'Config saved successfully!',

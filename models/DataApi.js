@@ -21,13 +21,17 @@ class DataFragmentApi {
     const url = data.id ? `${this.endpoint}/${data.id}` : this.endpoint
     const requestMethod = data.id ? axios.patch : axios.post
 
-    const { dataFragments, schema, ...shallowData } = data
+    const { dataFragments, schema, snapshots, ...shallowData } = data
     shallowData.schema = schema ? schema.id : null
     shallowData.dataFragments = dataFragments ?
       dataFragments.map(dataFragment => dataFragment.id) :
       []
 
     await requestMethod(url, shallowData).then(response => response.data)
+  }
+
+  getSnapshotUrl(configIdentifier, version) {
+    return `${process.env.API_URL}/config/${configIdentifier}?v=${version}`
   }
 
 }
